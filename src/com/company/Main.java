@@ -15,9 +15,10 @@ public class Main {
 
         for(int i = rand.nextInt(100); i > 0; i--){
             r1 = rand.nextInt(cols);
+            r2 = rand.nextInt(cols);
             line1 = board[r1];
 
-            while(r1 == r2)
+            while(r1 == r2 || r1 / 3 != r2 / 3)
                 r2 = rand.nextInt(cols);
 
             line2 = board[r2];
@@ -37,13 +38,14 @@ public class Main {
 
         for(int i = rand.nextInt(100); i > 0; i--){
             r1 = rand.nextInt(cols);
+            r2 = rand.nextInt(cols);
             line1 = new Integer[cols];
             line2 = new Integer[cols];
 
             for(int i2 = 0; i2 < cols; i2++)
                 line1[i2] = board[i2][r1];
 
-            while(r1 == r2)
+            while(r1 == r2 || r1 / 3 != r2 / 3)
                 r2 = rand.nextInt(cols);
 
             for(int i2 = 0; i2 < cols; i2++)
@@ -53,6 +55,73 @@ public class Main {
                 board[i2][r1] = line2[i2];
                 board[i2][r2] = line1[i2];
             }
+        }
+    }
+
+    private  static void shuffleBigVertical(Integer[][] board){
+        Random rand = new Random();
+        int r1;
+        int r2;
+        Integer[][] line1;
+        Integer[][] line2;
+
+        for(int i = rand.nextInt(100); i > 0; i--) {
+            line1 = new Integer[3][cols];
+            line2 = new Integer[3][cols];
+            r1 = rand.nextInt(8) / 3;
+            r2 = rand.nextInt(8) / 3;
+
+            while (r1 == r2)
+                r2 = rand.nextInt(8) / 3;
+
+            r1 *= 3;
+            r2 *= 3;
+
+            for (int i2 = 0; i2 < 3; i2++) {
+                line1[i2] = board[r1 + i2];
+                line2[i2] = board[r2 + i2];
+            }
+
+            for (int i2 = 0; i2 < 3; i2++) {
+                board[i2 + r1] = line2[i2];
+                board[i2 + r2] = line1[i2];
+            }
+        }
+    }
+
+    private static void shuffleBigHorizontal(Integer[][] board){
+        Random rand = new Random();
+        int r1;
+        int r2;
+        Integer[][] line1;
+        Integer[][] line2;
+
+        for(int i = rand.nextInt(100); i > 0; i--) {
+            line1 = new Integer[cols][3];
+            line2 = new Integer[cols][3];
+            r1 = rand.nextInt(8) / 3;
+            r2 = rand.nextInt(8) / 3;
+
+            while (r1 == r2)
+                r2 = rand.nextInt(8) / 3;
+
+            r1 *= 3;
+            r2 *= 3;
+
+            for(int i2 = 0; i2 < 3; i2++){
+                for(int i3 = 0; i3 < cols; i3++){
+                    line1[i3][i2] = board[i3][i2+r1];
+                    line2[i3][i2] = board[i3][i2+r2];
+                }
+            }
+
+            for(int i2 = 0; i2 < 3; i2++){
+                for(int i3 = 0; i3 < cols; i3++){
+                    board[i3][i2+r1] = line2[i3][i2];
+                    board[i3][i2+r2] = line1[i3][i2];
+                }
+            }
+
         }
     }
 
@@ -71,6 +140,8 @@ public class Main {
 
         shuffleVertical(board);
         shuffleHorizontal(board);
+        shuffleBigVertical(board);
+        shuffleBigHorizontal(board);
 
         for(Integer[] line: board){
             for(Integer field: line)
